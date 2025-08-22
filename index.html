@@ -5709,8 +5709,6 @@ let activeTab = 'products';
 let favorites = [];
 let cartItems = [];
 let touchStartY = 0;
-let touchStartX = 0;
-let currentScrollPosition = 0;
 
 // ===== ДАННЫЕ ТОВАРОВ ===== 
 const products = [
@@ -5754,45 +5752,6 @@ const products = [
         rating: 4.9, 
         reviews: 32, 
         keywords: ["кольцо", "золото", "бриллиант", "украшение"] 
-    },
-    { 
-        id: 4, 
-        title: "Смартфон Ultra", 
-        images: [
-            "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-        ], 
-        description: "Мощный смартфон с лучшей камерой на рынке.", 
-        price: 69990, 
-        category: "electronics", 
-        rating: 4.7, 
-        reviews: 45, 
-        keywords: ["смартфон", "камера", "ультра"] 
-    },
-    { 
-        id: 5, 
-        title: "Ноутбук Pro", 
-        images: [
-            "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-        ], 
-        description: "Профессиональный ноутбук для работы и творчества.", 
-        price: 89990, 
-        category: "electronics", 
-        rating: 4.9, 
-        reviews: 38, 
-        keywords: ["ноутбук", "профессиональный", "работа"] 
-    },
-    { 
-        id: 6, 
-        title: "Кроссовки Sport", 
-        images: [
-            "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-        ], 
-        description: "Спортивные кроссовки для бега и тренировок.", 
-        price: 12990, 
-        category: "shoes", 
-        rating: 4.6, 
-        reviews: 29, 
-        keywords: ["кроссовки", "спорт", "бег"] 
     }
 ];
 
@@ -5960,60 +5919,7 @@ function initProductsPage() {
                 openProductPage(product);
             });
             
-            // Добавляем обработчики свайпа для карточки
-            setupSwipeForCard(card);
-            
             productsFeed.appendChild(card);
-        });
-    }
-
-    // ===== НАСТРОЙКА СВАЙПА ДЛЯ КАРТОЧКИ =====
-    function setupSwipeForCard(card) {
-        let startY = 0;
-        
-        card.addEventListener('touchstart', function(e) {
-            startY = e.touches[0].clientY;
-            e.stopPropagation(); // Предотвращаем всплытие
-        });
-        
-        card.addEventListener('touchmove', function(e) {
-            const currentY = e.touches[0].clientY;
-            const diffY = currentY - startY;
-            
-            // Если свайп вниз достаточно сильный
-            if (diffY > 50) {
-                // Плавно скрываем карточку
-                card.style.transform = `translateY(${diffY}px)`;
-                card.style.opacity = `${1 - (diffY / 200)}`;
-            }
-            
-            e.stopPropagation(); // Предотвращаем всплытие
-        });
-        
-        card.addEventListener('touchend', function(e) {
-            const endY = e.changedTouches[0].clientY;
-            const diffY = endY - startY;
-            
-            // Если свайп вниз достаточно сильный, скрываем карточку
-            if (diffY > 100) {
-                card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-                card.style.transform = 'translateY(500px)';
-                card.style.opacity = '0';
-                
-                // Удаляем карточку после анимации
-                setTimeout(() => {
-                    if (card.parentNode) {
-                        card.parentNode.removeChild(card);
-                    }
-                }, 300);
-            } else {
-                // Возвращаем карточку на место
-                card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-                card.style.transform = 'translateY(0)';
-                card.style.opacity = '1';
-            }
-            
-            e.stopPropagation(); // Предотвращаем всплытие
         });
     }
 
@@ -6141,48 +6047,57 @@ function hideProductsPage() {
     currentPage = 'main-page';
 }
 
-// ===== ОБРАБОТЧИКИ СВАЙПОВ =====
+// ===== ОБРАБОТЧИКИ СВАЙПОВ ДЛЯ ВОЗВРАТА НА ГЛАВНУЮ =====
 document.addEventListener('touchstart', function(e) {
     if (currentPage === 'products-page') {
-        touchStartY = e.touches[0].clientY;
-        currentScrollPosition = window.scrollY;
+        // Сохраняем начальную позицию касания только если мы в самом верху страницы
+        if (window.scrollY <= 10) {
+            touchStartY = e.touches[0].clientY;
+        }
     } else if (currentPage === 'main-page' && window.scrollY <= 0) {
         touchStartY = e.touches[0].clientY;
     }
 });
 
 document.addEventListener('touchmove', function(e) {
-    if (currentPage === 'products-page' && touchStartY && currentScrollPosition <= 0) {
+    if (currentPage === 'products-page' && touchStartY && window.scrollY <= 10) {
         const currentY = e.touches[0].clientY;
         const diffY = currentY - touchStartY;
         
         // Если свайп вниз и мы в самом верху страницы
-        if (diffY > 0 && window.scrollY <= 0) {
-            // Показываем индикатор возврата
-            document.body.style.transform = `translateY(${diffY}px)`;
+        if (diffY > 0) {
+            // Показываем индикатор возврата - двигаем всю страницу вниз
+            document.getElementById('products-page').style.transform = `translateY(${diffY}px)`;
             e.preventDefault();
         }
     }
 });
 
 document.addEventListener('touchend', function(e) {
-    if (currentPage === 'products-page' && touchStartY && window.scrollY <= 0) {
+    if (currentPage === 'products-page' && touchStartY && window.scrollY <= 10) {
         const touchEndY = e.changedTouches[0].clientY;
         const diffY = touchEndY - touchStartY;
         
-        // Возвращаем тело на место
-        document.body.style.transform = 'translateY(0)';
-        document.body.style.transition = 'transform 0.3s ease';
+        // Возвращаем страницу на место с анимацией
+        const productsPage = document.getElementById('products-page');
+        productsPage.style.transition = 'transform 0.3s ease';
+        productsPage.style.transform = 'translateY(0)';
         
         // Если свайп вниз достаточно сильный, возвращаемся на главную
         if (diffY > 100) {
-            hideProductsPage();
+            setTimeout(() => {
+                hideProductsPage();
+                // Сбрасываем трансформацию после перехода
+                productsPage.style.transition = '';
+                productsPage.style.transform = '';
+            }, 300);
+        } else {
+            // Сбрасываем трансформацию если свайп был слабым
+            setTimeout(() => {
+                productsPage.style.transition = '';
+                productsPage.style.transform = '';
+            }, 300);
         }
-        
-        // Убираем transition после анимации
-        setTimeout(() => {
-            document.body.style.transition = '';
-        }, 300);
         
         touchStartY = 0;
     } else if (currentPage === 'main-page' && touchStartY && window.scrollY <= 0) {
@@ -6229,7 +6144,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ===== ДОБАВЛЯЕМ СТИЛИ ДЛЯ СКЕЛЕТОНОВ =====
+// ===== ДОБАВЛЯЕМ СТИЛИ ДЛЯ СКЕЛЕТОНОВ И СЕТКИ =====
 // Проверяем, не добавлены ли стили уже
 if (!document.getElementById('skeleton-styles')) {
     const style = document.createElement('style');
@@ -6291,6 +6206,11 @@ if (!document.getElementById('skeleton-styles')) {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+        }
+        
+        /* Анимация для свайпа вниз */
+        #products-page {
+            transition: transform 0.3s ease;
         }
     `;
     document.head.appendChild(style);
