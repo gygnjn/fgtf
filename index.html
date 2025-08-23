@@ -2070,723 +2070,470 @@
       margin-bottom: 3px;
     }
 
-/* ===== СТИЛИ СТРАНИЦЫ ТОВАРОВ (НОВЫЕ) ===== */
-#products-page {
+/* Стили для страницы товаров (ОБНОВЛЕННЫЕ) */
+.products-page {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background: #0a0a0a;
   z-index: 1001;
+  overflow-y: auto;
+  padding-bottom: 90px;
   display: none;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.28, 0.11, 0.32, 1), opacity 0.3s;
+}
+.products-page * {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
-#products-page * { 
-  margin:0; 
-  padding:0; 
-  box-sizing:border-box; 
-  -webkit-tap-highlight-color:transparent; 
+.products-page.swipe-active::before {
+  content: "";
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 5px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 3px;
+  opacity: 1;
+  transition: opacity 0.3s;
 }
 
-#products-page .top-bar { 
-  position:fixed; 
-  top:0; 
-  left:0; 
-  right:0; 
-  height:44px; 
-  background:#000; 
-  display:flex; 
-  justify-content:space-between; 
-  align-items:center; 
-  padding:0 16px; 
-  z-index:1000; 
-  border-bottom:0.5px solid #333;
+.products-page::before {
+  content: "";
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 5px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-#products-page .logo { 
-  color:#fff; 
-  font-weight:600; 
+.products-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background: #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 1000;
+  border-bottom: 0.5px solid #333;
 }
 
-#products-page .header-container { 
-  position:fixed; 
-  top:44px; 
-  left:0; 
-  right:0; 
-  background:#000; 
-  z-index:999; 
-  padding:12px 16px 10px; 
-  border-bottom:0.5px solid #333; 
-  transition:transform .3s; 
+.back-button {
+  background: none;
+  border: none;
+  color: #007AFF;
+  font-size: 17px;
+  cursor: pointer;
 }
 
-#products-page .segmented { 
-  display:flex; 
-  background:#1c1c1e; 
-  border-radius:10px; 
-  padding:4px; 
-  gap:4px; 
+.products-title {
+  color: #fff;
+  font-weight: 600;
 }
 
-#products-page .segment-btn{ 
-  flex:1; 
-  border:none; 
-  background:transparent; 
-  color:#aaa; 
-  padding:8px 10px; 
-  border-radius:8px; 
-  font-size:14px; 
-  cursor:pointer; 
-  transition:background .2s,color .2s; 
+/* Стили для контента товаров */
+.products-content {
+  margin-top: 44px;
+  padding: 16px;
 }
 
-#products-page .segment-btn.active{ 
-  background:#2c2c2e; 
-  color:#fff; 
+.header-container {
+  position: sticky; /* Изменено с fixed на sticky для работы в новой структуре */
+  top: 44px;
+  left: 0;
+  right: 0;
+  background: #000;
+  z-index: 999;
+  padding: 12px 16px 10px;
+  border-bottom: 0.5px solid #333;
+  transition: transform .3s;
 }
 
-#products-page .search-container { 
-  position:relative; 
-  margin-top:12px; 
-  margin-bottom:10px; 
+.segmented {
+  display: flex;
+  background: #1c1c1e;
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 10px;
 }
 
-#products-page .search-input {
-  width:100%; 
-  padding:10px 15px 10px 40px; 
-  background:#1c1c1e; 
-  border:none; 
-  border-radius:10px; 
-  color:#fff; 
-  font-size:16px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E"); 
-  background-repeat:no-repeat; 
-  background-position:15px center; 
-  transition:box-shadow .3s;
+.segment-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #aaa;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s,color .2s;
 }
 
-#products-page .search-input:focus { 
-  animation:shadowPulse 1.5s infinite; 
+.segment-btn.active {
+  background: #2c2c2e;
+  color: #fff;
 }
 
-@keyframes shadowPulse { 
-  0%{box-shadow:0 0 0 0 rgba(0,122,255,.4)} 
-  70%{box-shadow:0 0 0 10px rgba(0,122,255,0)} 
-  100%{box-shadow:0 0 0 0 rgba(0,122,255,0)} 
+.search-container {
+  position: relative;
+  margin-bottom: 10px;
 }
 
-#products-page .toolbar { 
-  display:flex; 
-  gap:8px; 
-  margin-bottom:10px; 
+.search-input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  background: #1c1c1e;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  transition: box-shadow .3s;
+}
+.search-input:focus {
+  animation: shadowPulse 1.5s infinite;
+}
+@keyframes shadowPulse {
+  0%{box-shadow:0 0 0 0 rgba(0,122,255,.4)}
+  70%{box-shadow:0 0 0 10px rgba(0,122,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(0,122,255,0)}
 }
 
-#products-page .select-ios, 
-#products-page .categories-toggle{ 
-  width:100%; 
-  padding:12px; 
-  background:#1c1c1e; 
-  border:none; 
-  border-radius:10px; 
-  color:#999; 
-  font-size:14px; 
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
-#products-page .categories-toggle{ 
-  text-align:left; 
-  position:relative; 
-  cursor:pointer; 
+.select-ios, .categories-toggle {
+  width: 100%;
+  padding: 12px;
+  background: #1c1c1e;
+  border: none;
+  border-radius: 10px;
+  color: #999;
+  font-size: 14px;
 }
-
-#products-page .categories-toggle::after{ 
-  content:""; 
-  position:absolute; 
-  right:16px; 
-  top:50%; 
-  transform:translateY(-50%); 
-  width:16px; 
+.categories-toggle {
+  text-align: left;
+  position: relative;
+  cursor: pointer;
+}
+.categories-toggle::after {
+  content:"";
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  width:16px;
   height:16px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); 
-  background-repeat:no-repeat; 
-  transition:transform .3s; 
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  transition:transform .3s;
+}
+.categories-toggle.active::after {
+  transform:translateY(-50%) rotate(180deg);
 }
 
-#products-page .categories-toggle.active::after{ 
-  transform:translateY(-50%) rotate(180deg); 
+.categories-dropdown {
+  background: #1c1c1e;
+  border-radius: 10px;
+  margin-top: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-height: 0;
+  transition: max-height .4s cubic-bezier(.23,1,.32,1);
+  display: flex;
+  flex-direction: row;
+  padding: 0;
 }
 
-#products-page .categories-dropdown { 
-  background:#1c1c1e; 
-  border-radius:10px; 
-  margin-top:8px; 
-  overflow-x:auto; 
-  white-space:nowrap; 
-  max-height:0; 
-  transition:max-height .4s cubic-bezier(.23,1,.32,1); 
-  display:flex; 
-  flex-direction:row; 
-  padding:0; 
+.categories-dropdown.active {
+  max-height: 60px;
+  padding: 8px;
 }
 
-#products-page .categories-dropdown.active{ 
-  max-height:60px; 
-  padding:8px; 
+.category-item {
+  padding: 8px 16px;
+  color: #e0e0e0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background .2s;
+  display: inline-block;
+  border-radius: 8px;
+  margin-right: 8px;
+  background: #2c2c2e;
+}
+.category-item:last-child {
+  margin-right:0;
+}
+.category-item:active {
+  background:#3a3a3c;
 }
 
-#products-page .category-item{ 
-  padding:8px 16px; 
-  color:#e0e0e0; 
-  font-size:16px; 
-  cursor:pointer; 
-  transition:background .2s; 
-  display:inline-block; 
-  border-radius:8px; 
-  margin-right:8px; 
-  background:#2c2c2e; 
+.products-feed {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 10px; /* Добавлен отступ сверху */
 }
 
-#products-page .category-item:last-child{ 
-  margin-right:0; 
+.product-card {
+  background: #1c1c1e;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .1s, box-shadow .3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  position: relative;
+  touch-action: pan-y;
+}
+.product-card:active {
+  transform: scale(.97);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
 }
 
-#products-page .category-item:active{ 
-  background:#3a3a3c; 
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  opacity: 0; /* Добавлено для плавной загрузки */
+  transition: opacity .3s;
+}
+.product-image.loaded {
+  opacity: 1;
 }
 
-#products-page .products-feed{ 
-  display:grid; 
-  grid-template-columns:repeat(2, 1fr); 
-  gap:16px; 
-  padding:16px; 
-  margin-top:220px; 
-  position:relative; 
-  z-index:1;
+.product-content {
+  padding: 14px;
 }
 
-#products-page .product-card{ 
-  background:#1c1c1e; 
-  border-radius:12px; 
-  overflow:hidden; 
-  transition:transform .1s, box-shadow .3s; 
-  box-shadow:0 1px 3px rgba(0,0,0,.1); 
-  position:relative; 
-  touch-action:pan-y; 
+.product-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #fff;
 }
 
-#products-page .product-card:active{ 
-  transform:scale(.97); 
-  box-shadow:0 4px 12px rgba(0,0,0,.2); 
+.product-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
 }
 
-#products-page .product-image{ 
-  width:100%; 
-  height:180px; 
-  object-fit:cover; 
-  opacity:0; 
-  transition:opacity .3s; 
+/* Новые стили: Скелетон */
+.skeleton-card {
+  background: #1c1c1e;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.sk-image, .sk-line {
+  background: linear-gradient(90deg, #2a2a2c 25%, #3a3a3c 37%, #2a2a2c 63%);
+  background-size: 400% 100%;
+  animation: sk 1.4s ease infinite;
+}
+.sk-image {
+  height: 180px;
+}
+.sk-content {
+  padding: 14px;
+}
+.sk-line {
+  height: 14px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+@keyframes sk {
+  0%{background-position:100% 0}
+  100%{background-position:0 0}
 }
 
-#products-page .product-image.loaded{ 
-  opacity:1; 
+.loading-spinner {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007aff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
 }
 
-#products-page .product-content{ 
-  padding:14px; 
+@keyframes spin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
 }
 
-#products-page .product-title{ 
-  font-size:16px; 
-  font-weight:500; 
-  margin-bottom:6px; 
-  color:#fff; 
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  display: none;
+  grid-column: 1 / -1;
 }
 
-#products-page .product-price{ 
-  font-size:18px; 
-  font-weight:600; 
-  color:#fff; 
+/* Новые стили: Кнопка корзины */
+.cart-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  cursor: pointer;
+  z-index: 1100;
+  transition: transform .3s;
+  color: #fff;
 }
-
-#products-page .swipe-bg{ 
-  position:absolute; 
-  inset:0; 
-  display:flex; 
-  align-items:center; 
-  justify-content:space-between; 
-  padding:0 12px; 
-  pointer-events:none; 
-  z-index:0; 
+.cart-button:hover {
+  animation: pulse 1s infinite;
 }
-
-#products-page .swipe-left, 
-#products-page .swipe-right{ 
-  font-size:12px; 
-  padding:6px 10px; 
-  border-radius:14px; 
-  opacity:.0; 
-  transition:opacity .2s, transform .2s; 
-}
-
-#products-page .swipe-left{ 
-  background:#007aff; 
-  color:#fff; 
-}
-
-#products-page .swipe-right{ 
-  background:#ff2d55; 
-  color:#fff; 
-}
-
-#products-page .product-card.swiping .swipe-left, 
-#products-page .product-card.swiping .swipe-right{ 
-  opacity:.8; 
-}
-
-#products-page .quick-view-btn{ 
-  position:absolute; 
-  bottom:10px; 
-  left:50%; 
-  transform:translateX(-50%); 
-  background:rgba(0,122,255,.9); 
-  color:#fff; 
-  border:none; 
-  padding:8px 16px; 
-  border-radius:20px; 
-  font-size:14px; 
-  opacity:0; 
-  transition:opacity .3s; 
-  z-index:2; 
-}
-
-#products-page .product-card:hover .quick-view-btn{ 
-  opacity:1; 
-}
-
-#products-page .product-brand{ 
-  position:absolute; 
-  top:10px; 
-  right:10px; 
-  background:rgba(0,0,0,.5); 
-  color:#fff; 
-  padding:4px 8px; 
-  border-radius:4px; 
-  font-size:10px; 
-  font-weight:500; 
-  text-transform:uppercase; 
-  letter-spacing:1px; 
-  z-index:2;
-}
-
-#products-page .product-page{ 
-  position:fixed; 
-  top:0; 
-  left:0; 
-  right:0; 
-  bottom:0; 
-  background:#0a0a0a; 
-  z-index:2000; 
-  transform:translateY(100%); 
-  transition:transform .5s cubic-bezier(.23,1,.32,1); 
-  overflow-y:auto; 
-  will-change:transform; 
-}
-
-#products-page .product-page.active{ 
-  transform:translateY(0); 
-}
-
-#products-page .product-header{ 
-  position:sticky; 
-  top:0; 
-  background:rgba(0,0,0,.8); 
-  backdrop-filter:blur(20px); 
-  padding:12px 16px; 
-  display:flex; 
-  justify-content:flex-end; 
-  z-index:2;
-}
-
-#products-page .close-btn{ 
-  color:#007aff; 
-  font-size:17px; 
-  font-weight:500; 
-  cursor:pointer; 
-}
-
-#products-page .product-carousel{ 
-  width:100%; 
-  overflow:hidden; 
-  position:relative; 
-  height:300px; 
-}
-
-#products-page .carousel-inner{ 
-  display:flex; 
-  transition:transform .3s cubic-bezier(.23,1,.32,1); 
-  height:100%; 
-  will-change:transform; 
-}
-
-#products-page .carousel-item{ 
-  min-width:100%; 
-  height:100%; 
-  position:relative; 
-}
-
-#products-page .carousel-item img{ 
-  width:100%; 
-  height:100%; 
-  object-fit:cover; 
-}
-
-#products-page .carousel-indicators{ 
-  display:flex; 
-  justify-content:center; 
-  position:absolute; 
-  bottom:15px; 
-  left:0; 
-  right:0; 
-  z-index:1; 
-}
-
-#products-page .carousel-indicator{ 
-  width:8px; 
-  height:8px; 
-  border-radius:50%; 
-  background:rgba(255,255,255,.5); 
-  margin:0 4px; 
-  transition:transform .3s, background .3s; 
-}
-
-#products-page .carousel-indicator.active{ 
-  background:#fff; 
-  transform:scale(1.2); 
-}
-
-#products-page .product-details{ 
-  padding:20px; 
-  background:#1c1c1e; 
-  margin:16px; 
-  border-radius:12px; 
-}
-
-#products-page .product-page-title{ 
-  font-size:22px; 
-  font-weight:600; 
-  margin-bottom:8px; 
-  color:#fff; 
-}
-
-#products-page .product-page-price{ 
-  font-size:24px; 
-  font-weight:700; 
-  margin-bottom:16px; 
-  color:#fff; 
-}
-
-#products-page .product-rating{ 
-  display:flex; 
-  align-items:center; 
-  margin-bottom:16px; 
-}
-
-#products-page .rating-stars{ 
-  color:#ffcc00; 
-  font-size:14px; 
-  margin-right:6px; 
-}
-
-#products-page .rating-count{ 
-  color:#999; 
-  font-size:12px; 
-}
-
-#products-page .recommendations-section{ 
-  margin-top:24px; 
-  border-top:.5px solid #333; 
-  padding-top:16px; 
-}
-
-#products-page .recommendations-section h3{ 
-  font-size:18px; 
-  margin-bottom:12px; 
-  color:#fff; 
-}
-
-#products-page .recommendations-grid{ 
-  display:grid; 
-  grid-template-columns:repeat(2,1fr); 
-  gap:12px; 
-}
-
-#products-page .add-to-cart-btn{ 
-  width:100%; 
-  padding:16px; 
-  background:#007aff; 
-  border:none; 
-  border-radius:10px; 
-  color:#fff; 
-  font-size:17px; 
-  font-weight:500; 
-  margin-top:20px; 
-  transition:opacity .2s; 
-}
-
-#products-page .add-to-cart-btn:active{ 
-  opacity:.7; 
-}
-
-#products-page .edge-hint{
-  position:fixed; 
-  top:0; 
-  left:0; 
-  width:24px; 
-  height:100%; 
-  z-index:2001;
-  background:linear-gradient(90deg, rgba(255,255,255,.06), transparent);
-  opacity:.0; 
-  pointer-events:none; 
-  transition:opacity .2s;
-}
-
-#products-page .product-page.active.back-dragging .edge-hint{ 
-  opacity:.6; 
-}
-
-#products-page .skeleton-card{ 
-  background:#1c1c1e; 
-  border-radius:12px; 
-  overflow:hidden; 
-}
-
-#products-page .sk-image, 
-#products-page .sk-line{ 
-  background:linear-gradient(90deg, #2a2a2c 25%, #3a3a3c 37%, #2a2a2c 63%); 
-  background-size:400% 100%; 
-  animation:sk 1.4s ease infinite; 
-}
-
-#products-page .sk-image{ 
-  height:180px; 
-}
-
-#products-page .sk-content{ 
-  padding:14px; 
-}
-
-#products-page .sk-line{ 
-  height:14px; 
-  border-radius:8px; 
-  margin-bottom:8px; 
-}
-
-@keyframes sk { 
-  0%{background-position:100% 0} 
-  100%{background-position:0 0} 
-}
-
-#products-page .loading-spinner{ 
-  display:none; 
-  width:40px; 
-  height:40px; 
-  border:4px solid #f3f3f3; 
-  border-top:4px solid #007aff; 
-  border-radius:50%; 
-  animation:spin 1s linear infinite; 
-  margin:20px auto; 
-}
-
-@keyframes spin{
-  0%{transform:rotate(0)}
-  100%{transform:rotate(360deg)}
-}
-
-#products-page .empty-state{ 
-  text-align:center; 
-  padding:40px 20px; 
-  color:#999; 
-  display:none; 
-  grid-column:1 / -1; 
-}
-
-#products-page .cart-button{ 
-  position:fixed; 
-  bottom:20px; 
-  right:20px; 
-  width:50px; 
-  height:50px; 
-  background:#000; 
-  border-radius:50%; 
-  display:flex; 
-  align-items:center; 
-  justify-content:center; 
-  font-size:24px; 
-  box-shadow:0 4px 12px rgba(0,0,0,.2); 
-  cursor:pointer; 
-  z-index:1100; 
-  transition:transform .3s; 
-  color:#fff; 
-}
-
-#products-page .cart-button:hover{ 
-  animation:pulse 1s infinite; 
-}
-
-@keyframes pulse{
+@keyframes pulse {
   0%{transform:scale(1)}
   50%{transform:scale(1.1)}
   100%{transform:scale(1)}
 }
-
-#products-page .cart-counter{ 
-  position:absolute; 
-  top:-5px; 
-  right:-5px; 
-  background:#007aff; 
-  color:#fff; 
-  border-radius:50%; 
-  width:20px; 
-  height:20px; 
-  display:flex; 
-  align-items:center; 
-  justify-content:center; 
-  font-size:12px; 
-  font-weight:bold; 
+.cart-counter {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #007aff;
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-#products-page .sheet-backdrop{ 
-  position:fixed; 
-  inset:0; 
-  background:rgba(0,0,0,.4); 
-  backdrop-filter:blur(2px); 
-  z-index:2100; 
-  opacity:0; 
-  pointer-events:none; 
-  transition:opacity .25s; 
+/* Новые стили: Шторка (Sheet) для корзины */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  backdrop-filter: blur(2px);
+  z-index: 2100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -70vh;
+  height: 70vh;
+  background: #111;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  z-index: 2200;
+  box-shadow: 0 -10px 30px rgba(0,0,0,.4);
+  transition: transform .35s;
+  transform: translateY(100%);
+  display: flex;
+  flex-direction: column;
+}
+.sheet.open {
+  transform: translateY(0);
+}
+.sheet-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.sheet-header {
+  padding: 12px 16px;
+  border-bottom: .5px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sheet-drag {
+  width: 36px;
+  height: 4px;
+  background: #333;
+  border-radius: 999px;
+  margin: 6px auto 10px;
+}
+.sheet-title {
+  font-weight: 600;
+  color: #fff;
+}
+.sheet-content {
+  flex: 1;
+  overflow: auto;
+  padding: 8px 16px 16px;
+}
+.cart-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: .5px solid #222;
+  align-items: center;
+}
+.cart-item img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.cart-item h4 {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #fff;
+}
+.cart-item .price {
+  font-weight: 600;
+  color: #fff;
+}
+.sheet-footer {
+  padding: 12px 16px 16px;
+  border-top: .5px solid #333;
+}
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: #0a84ff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
 }
 
-#products-page .sheet{ 
-  position:fixed; 
-  left:0; 
-  right:0; 
-  bottom:-70vh; 
-  height:70vh; 
-  background:#111; 
-  border-top-left-radius:16px; 
-  border-top-right-radius:16px; 
-  z-index:2200; 
-  box-shadow:0 -10px 30px rgba(0,0,0,.4); 
-  transition:transform .35s; 
-  transform:translateY(100%); 
-  display:flex; 
-  flex-direction:column; 
-}
-
-#products-page .sheet.open{ 
-  transform:translateY(0); 
-}
-
-#products-page .sheet-backdrop.open{ 
-  opacity:1; 
-  pointer-events:auto; 
-}
-
-#products-page .sheet-header{ 
-  padding:12px 16px; 
-  border-bottom:.5px solid #333; 
-  display:flex; 
-  align-items:center; 
-  justify-content:space-between; 
-}
-
-#products-page .sheet-drag{ 
-  width:36px; 
-  height:4px; 
-  background:#333; 
-  border-radius:999px; 
-  margin:6px auto 10px; 
-}
-
-#products-page .sheet-title{ 
-  font-weight:600; 
-}
-
-#products-page .sheet-content{ 
-  flex:1; 
-  overflow:auto; 
-  padding:8px 16px 16px; 
-}
-
-#products-page .cart-item{ 
-  display:flex; 
-  gap:10px; 
-  padding:10px 0; 
-  border-bottom:.5px solid #222; 
-  align-items:center; 
-}
-
-#products-page .cart-item img{ 
-  width:56px; 
-  height:56px; 
-  object-fit:cover; 
-  border-radius:10px; 
-}
-
-#products-page .cart-item h4{ 
-  font-size:14px; 
-  margin-bottom:4px; 
-}
-
-#products-page .cart-item .price{ 
-  font-weight:600; 
-}
-
-#products-page .sheet-footer{ 
-  padding:12px 16px 16px; 
-  border-top:.5px solid #333; 
-}
-
-#products-page .checkout-btn{ 
-  width:100%; 
-  padding:14px; 
-  border:none; 
-  border-radius:12px; 
-  background:#0a84ff; 
-  color:#fff; 
-  font-weight:600; 
-  font-size:16px; 
-}
-
-#products-page .ptr{ 
-  position:fixed; 
-  top:44px; 
-  left:0; 
-  right:0; 
-  height:0; 
-  overflow:hidden; 
-  display:flex; 
-  align-items:center; 
-  justify-content:center; 
-  color:#9aa; 
-  z-index:1200; 
-  transition:height .2s; 
-}
-
-#products-page .ptr-inner{ 
-  background:#1c1c1e; 
-  border-radius:10px; 
-  padding:6px 10px; 
-  font-size:12px; 
-}
-
-@media (max-width:600px){ 
-  #products-page .products-feed{ 
-    grid-template-columns:1fr; 
-  } 
-  #products-page .product-carousel{ 
-    height:250px; 
-  } 
+/* Адаптивность */
+@media (max-width:600px) {
+  .products-feed {
+    grid-template-columns: 1fr;
+  }
 }
 
  /* Добавляем стили из страницы пополнения */
@@ -4246,88 +3993,39 @@
     </div>
   </div>
 
-<!-- СТРАНИЦА ТОВАРОВ (НОВАЯ ВЕРСИЯ) -->
-<div id="products-page">
-  <!-- Шапка iOS -->
-  <div class="top-bar">
-    <div class="logo">Каталог</div>
+<!-- Страница товаров -->
+<div id="products-page" class="products-page">
+  <div class="products-header">
+    <button class="back-button" onclick="hideProductsPage()">Назад</button>
+    <div class="products-title">Каталог</div>
+    <div style="width: 60px;"></div> <!-- Для выравнивания -->
   </div>
 
-  <!-- Объединенный верхний блок iOS -->
-  <div class="header-container">
-    <!-- сегмент-контрол -->
+  <div class="products-content">
     <div class="segmented" style="margin-bottom:10px;">
       <button class="segment-btn active" id="tabProducts">Товары</button>
       <button class="segment-btn" id="tabWishlist">Избранное</button>
     </div>
 
-    <!-- Поиск -->
-    <div class="search-container">
-      <input type="text" class="search-input" placeholder="Поиск товаров..." id="searchInputProducts">
+    <!-- Pull to refresh -->
+    <div class="ptr" id="ptr"><div class="ptr-inner" id="ptrText">Потяните, чтобы обновить</div></div>
+
+    <!-- Лента товаров -->
+    <div class="products-feed" id="productsFeed"></div>
+
+    <!-- Индикатор загрузки -->
+    <div class="loading-spinner" id="loadingSpinner"></div>
+
+    <!-- Пустое состояние -->
+    <div class="empty-state" id="emptyState">
+      <h3>Товары не найдены</h3>
+      <p>Попробуйте изменить параметры поиска</p>
     </div>
 
-    <!-- Панель инструментов -->
-    <div class="toolbar">
-      <div class="categories-toggle" id="categoriesToggle">Категории</div>
-      <select class="select-ios" id="sortSelect" aria-label="Сортировка">
-        <option value="none">Сортировка: по умолчанию</option>
-        <option value="priceAsc">Цена: по возрастанию</option>
-        <option value="priceDesc">Цена: по убыванию</option>
-        <option value="ratingDesc">Рейтинг: высокий → низкий</option>
-      </select>
-    </div>
-
-    <!-- Выпадающее меню -->
-    <div class="categories-dropdown" id="categoriesDropdown">
-      <div class="category-item" onclick="filterProducts('all')">Все товары</div>
-      <div class="category-item" onclick="filterProducts('watches')">Часы</div>
-      <div class="category-item" onclick="filterProducts('headphones')">Наушники</div>
-      <div class="category-item" onclick="filterProducts('jewelry')">Украшения</div>
-      <div class="category-item" onclick="filterProducts('tshirts')">Футболки</div>
-      <div class="category-item" onclick="filterProducts('hoodies')">Толстовки</div>
-      <div class="category-item" onclick="filterProducts('hats')">Головные уборы</div>
-      <div class="category-item" onclick="filterProducts('shoes')">Обувь</div>
-      <div class="category-item" onclick="filterProducts('pants')">Брюки</div>
-    </div>
-  </div>
-
-  <!-- Pull to refresh -->
-  <div class="ptr" id="ptr"><div class="ptr-inner" id="ptrText">Потяните, чтобы обновить</div></div>
-
-  <!-- Лента товаров -->
-  <div class="products-feed" id="productsFeed"></div>
-
-  <!-- Индикатор загрузки -->
-  <div class="loading-spinner" id="loadingSpinner"></div>
-  
-  <!-- Пусто -->
-  <div class="empty-state" id="emptyState">
-    <h3>Товары не найдены</h3>
-    <p>Попробуйте изменить параметры поиска</p>
-  </div>
-
-  <!-- Страница товара -->
-  <div class="product-page" id="productPage">
-    <!-- edge hint для визуала свайпа назад -->
-    <div class="edge-hint" id="edgeHint" aria-hidden="true"></div>
-
-    <div class="product-header">
-      <div class="close-btn" onclick="closeProductPage()">Готово</div>
-    </div>
-    <div class="product-carousel">
-      <div class="carousel-inner" id="carouselInner"></div>
-      <div class="carousel-indicators" id="carouselIndicators"></div>
-    </div>
-    <div class="product-details">
-      <h1 class="product-page-title" id="productPageTitle"></h1>
-      <div class="product-page-price" id="productPagePrice"></div>
-      <div class="product-rating">
-        <div class="rating-stars" id="productRatingStars"></div>
-        <div class="rating-count" id="productRatingCount"></div>
-      </div>
-      <p class="product-page-description" id="productPageDescription"></p>
-      <button class="add-to-cart-btn" id="addToCartBtn">Добавить в корзину</button>
-      <!-- Рекомендации динамически -->
+    <!-- Страница товара -->
+    <div class="product-page" id="productPage">
+      <!-- edge hint для визуала свайпа назад -->
+      <div class="edge-hint" id="edgeHint" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -5647,584 +5345,474 @@ function hidePaymentModal() {
   document.getElementById('payment-modal').classList.remove('show');
 }
 
-// ===== ПЕРЕМЕННЫЕ СТРАНИЦЫ ТОВАРОВ ===== 
-// УБИРАЕМ повторные объявления - эти переменные уже объявлены выше!
-// let productsPageInitialized = false; // УДАЛИТЬ
-// let cartItems = []; // УДАЛИТЬ
-// let favorites = []; // УДАЛИТЬ
-let currentProduct = null;
-let currentImageIndex = 0;
-// let activeCategory = 'all'; // УДАЛИТЬ
-// let activeTab = 'products'; // УДАЛИТЬ
-
-// ===== ФУНКЦИИ УПРАВЛЕНИЯ СТРАНИЦЕЙ ===== 
-function showProductsPage() {
-    const allPages = [
-        document.getElementById('main-page'),
-        document.getElementById('cabinet-page'),
-        document.getElementById('treasure-page'),
-        document.getElementById('storage-page'),
-        document.getElementById('payment-page'),
-        document.getElementById('expenses-page'),
-        document.getElementById('profile-page'),
-        document.getElementById('reviews-page')
-    ];
-
-    allPages.forEach(page => {
-        if (page) page.style.display = 'none';
-    });
-
+// ===== ФУНКЦИОНАЛ СВАЙПА ДЛЯ ОТКРЫТИЯ СТРАНИЦЫ ТОВАРОВ =====
+    let startY, currentY, isSwipingUp = false;
+    let productsPageVisible = false;
     const productsPage = document.getElementById('products-page');
-    if (productsPage) {
-        productsPage.style.display = 'block';
+    const bottomNav = document.querySelector('.bottom-nav');
+
+    // Функция для показа страницы товаров
+    function showProductsPage() {
+      productsPageVisible = true;
+      bottomNav.style.transition = 'transform 0.4s cubic-bezier(0.28, 0.11, 0.32, 1)';
+      bottomNav.style.transform = 'translateY(100%)';
+      
+      productsPage.style.display = 'block';
+      productsPage.style.opacity = '0';
+      productsPage.style.transform = 'translateY(100%)';
+      productsPage.style.transition = 'transform 0.4s cubic-bezier(0.28, 0.11, 0.32, 1), opacity 0.3s';
+      
+      setTimeout(() => {
+        productsPage.style.opacity = '1';
+        productsPage.style.transform = 'translateY(0)';
+      }, 10);
+      
+      // Загружаем товары при первом открытии
+      if (document.getElementById('productsFeed').children.length === 0) {
+        loadProductsData();
+      }
     }
 
-    // Используем глобальные переменные
-    if (!window.productsPageInitialized) {
-        initProductsPage();
-        window.productsPageInitialized = true;
-    } else if (window.loadProducts) {
-        window.loadProducts();
-    }
-
-    updateActiveNav(null);
-    triggerVibration();
-}
-
-function hideProductsPage() {
-    const productsPage = document.getElementById('products-page');
-    if (productsPage) {
+    // Функция для скрытия страницы товаров
+    function hideProductsPage() {
+      productsPageVisible = false;
+      productsPage.style.transform = 'translateY(100%)';
+      productsPage.style.opacity = '0';
+      
+      setTimeout(() => {
         productsPage.style.display = 'none';
+        bottomNav.style.transform = 'translateY(0)';
+      }, 400);
     }
-    showPage(document.getElementById('main-page'));
-    triggerVibration();
-}
 
-// ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===== 
-// ОСТАВЛЯЕМ ТОЛЬКО ОДИН РАЗ объявление этих переменных!
-let currentPage = 'main-page';
-let productsPageInitialized = false;
-let activeCategory = 'all';
-let activeTab = 'products';
-let favorites = [];
-let cartItems = [];
-let touchStartY = 0;
+    // Обработчик свайпа вверх на главной странице
+    mainPage.addEventListener('touchstart', (e) => {
+      if (window.scrollY <= 0 && !productsPageVisible) {
+        startY = e.touches[0].clientY;
+        isSwipingUp = true;
+      }
+    }, { passive: true });
 
-// ===== ДАННЫЕ ТОВАРОВ ===== 
-const products = [
-    { 
-        id: 1, 
-        title: "Часы Premium Black", 
-        images: [
-            "https://images.unsplash.com/photo-1524805444758-089113d48a6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-        ], 
-        description: "Роскошные черные часы с автоматическим механизмом. Сапфировое стекло, водонепроницаемость 50м, кожаный ремешок.", 
-        price: 24990, 
-        category: "watches", 
-        rating: 4.8, 
-        reviews: 24, 
-        keywords: ["часы", "премиум", "черные", "кожаный ремешок"] 
-    },
-    { 
-        id: 2, 
-        title: "Наушники Pro Sound", 
-        images: [
-            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-        ], 
-        description: "Беспроводные наушники с активным шумоподавлением. 30 часов работы, влагозащита, премиальное звучание.", 
-        price: 18990, 
-        category: "headphones", 
-        rating: 4.5, 
-        reviews: 18, 
-        keywords: ["наушники", "беспроводные", "шумоподавление", "pro"] 
-    },
-    { 
-        id: 3, 
-        title: "Золотое кольцo", 
-        images: [
-            "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-        ], 
-        description: "Элегантное золотое кольцо с бриллиантом.", 
-        price: 45990, 
-        category: "jewelry", 
-        rating: 4.9, 
-        reviews: 32, 
-        keywords: ["кольцо", "золото", "бриллиант", "украшение"] 
-    }
-];
+    mainPage.addEventListener('touchmove', (e) => {
+      if (!isSwipingUp) return;
+      
+      currentY = e.touches[0].clientY;
+      const deltaY = startY - currentY;
+      
+      if (deltaY > 50) {
+        e.preventDefault();
+        showProductsPage();
+        isSwipingUp = false;
+      }
+    }, { passive: false });
 
-// ===== ОСНОВНАЯ ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ =====
-function initProductsPage() {
-    console.log('🚀 Инициализация страницы товаров...');
-    
-    // Используем уже объявленные глобальные переменные
-    if (typeof activeCategory === 'undefined') activeCategory = 'all';
-    if (typeof activeTab === 'undefined') activeTab = 'products';
-    if (typeof favorites === 'undefined') favorites = [];
-    if (typeof cartItems === 'undefined') cartItems = [];
-    if (typeof productsPageInitialized === 'undefined') productsPageInitialized = false;
-    
-    productsPageInitialized = true;
+    // Обработчик свайпа вниз на странице товаров
+    productsPage.addEventListener('touchstart', (e) => {
+      if (productsPageVisible && window.scrollY <= 0) {
+        startY = e.touches[0].clientY;
+        productsPage.classList.add('swipe-active');
+      }
+    }, { passive: true });
 
-    // ===== DOM ЭЛЕМЕНТЫ =====
-    const productsFeed = document.getElementById('productsFeed');
-    const searchInput = document.getElementById('searchInputProducts');
-    const categoriesToggle = document.getElementById('categoriesToggle');
-    const categoriesDropdown = document.getElementById('categoriesDropdown');
-    const emptyState = document.getElementById('emptyState');
-    const tabProducts = document.getElementById('tabProducts');
-    const tabWishlist = document.getElementById('tabWishlist');
-    const sortSelect = document.getElementById('sortSelect');
+    productsPage.addEventListener('touchmove', (e) => {
+      if (!productsPageVisible) return;
+      
+      currentY = e.touches[0].clientY;
+      const deltaY = currentY - startY;
+      
+      if (window.scrollY <= 0) {
+        if (deltaY > 0) {
+          e.preventDefault();
+          // Плавное затемнение при свайпе
+          productsPage.style.opacity = `${1 - deltaY / 300}`;
+        }
+      }
+    }, { passive: false });
 
-    // ===== ПРОВЕРКА ЭЛЕМЕНТОВ =====
-    if (!productsFeed) { console.error('❌ Не найден productsFeed'); return; }
-    if (!categoriesToggle) { console.error('❌ Не найден categoriesToggle'); return; }
-    if (!categoriesDropdown) { console.error('❌ Не найден categoriesDropdown'); return; }
-
-    console.log('✅ Все элементы найдены');
-
-    // ===== ИНИЦИАЛИЗАЦИЯ КНОПКИ КАТЕГОРИЙ =====
-    categoriesToggle.addEventListener('click', function(e) {
-        e.stopPropagation();
-        console.log('📁 Клик по кнопке категорий');
-        categoriesToggle.classList.toggle('active');
-        categoriesDropdown.classList.toggle('active');
+    productsPage.addEventListener('touchend', (e) => {
+      if (!productsPageVisible) return;
+      
+      const deltaY = currentY - startY;
+      productsPage.classList.remove('swipe-active');
+      
+      if (deltaY > 100 && window.scrollY <= 0) {
+        hideProductsPage();
+      } else {
+        // Возвращаем нормальную прозрачность если не досвайпнули
+        productsPage.style.opacity = '1';
+      }
     });
 
-    // Закрытие dropdown при клике вне его
-    document.addEventListener('click', function(e) {
-        if (categoriesDropdown.classList.contains('active') &&
-            !categoriesToggle.contains(e.target) && 
-            !categoriesDropdown.contains(e.target)) {
-            categoriesToggle.classList.remove('active');
-            categoriesDropdown.classList.remove('active');
-        }
+    // Очищаем флаги при окончании касания
+    document.addEventListener('touchend', () => {
+      isSwipingUp = false;
     });
 
-    // ===== ОБРАБОТЧИК ПОИСКА =====
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(function() {
-            console.log('🔍 Поиск:', searchInput.value);
-            loadProducts(activeCategory, searchInput.value);
-        }, 300));
-    }
-
-    // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
-    if (tabProducts && tabWishlist) {
-        tabProducts.addEventListener('click', function() {
-            tabProducts.classList.add('active');
-            tabWishlist.classList.remove('active');
-            activeTab = 'products';
-            loadProducts(activeCategory, searchInput.value);
+// ===== ФУНКЦИИ ДЛЯ СТРАНИЦЫ ТОВАРОВ =====
+    const productsData = [
+      { id:1, title:"Часы Premium Black", images:[
+        "https://images.unsplash.com/photo-1524805444758-089113d48a6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      ], description:"Роскошные черные часы с автоматическим механизмом.", price:24990, category:"watches", rating:4.8, reviews:24 },
+      { id:2, title:"Наушники Pro Sound", images:[
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      ], description:"Беспроводные наушники с активным шумоподавлением.", price:18990, category:"headphones", rating:4.5, reviews:18 },
+      { id:3, title:"Кольцо Diamond", images:[
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      ], description:"Элегантное серебряное кольцо с бриллиантом.", price:42500, category:"jewelry", rating:4.9, reviews:32 },
+      { id:4, title:"Умные часы Pro", images:[
+        "https://images.unsplash.com/photo-1558379850-823f103f866a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      ], description:"Умные часы с функцией мониторинга здоровья.", price:32990, category:"watches", rating:4.7, reviews:15 },
+      { id:5, title:"Беспроводные наушники Air", images:[
+        "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1578319439584-104c94d37305?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      ], description:"Компактные беспроводные наушники.", price:15990, category:"headphones", rating:4.3, reviews:22 },
+      { id:6, title:"Футболка Classic Black", images:[
+        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1527719327859-c6ce80353573?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      ], description:"Классическая черная футболка из 100% хлопка.", price:2990, category:"tshirts", rating:4.2, reviews:45 }
+    ];
+    
+    let activeCategory = 'all';
+    
+    // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+    let currentPage = 'main-page';
+    let activeTab = 'products';
+    let favorites = [];
+    let cartItems = [];
+    let productsPageInitialized = false;
+    let touchStartY = 0;
+    
+    function loadProductsData(category = activeCategory, searchQuery = '') {
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const productsFeed = document.getElementById('productsFeed');
+      
+      loadingSpinner.style.display = 'block';
+      productsFeed.innerHTML = '';
+      
+      // Имитация загрузки
+      setTimeout(() => {
+        loadingSpinner.style.display = 'none';
+        
+        let filtered = productsData.filter(p => {
+          const matchesCategory = category === 'all' || p.category === category;
+          if (searchQuery.trim() === '') return matchesCategory;
+          
+          const q = searchQuery.toLowerCase();
+          return p.title.toLowerCase().includes(q) || 
+                 p.description.toLowerCase().includes(q);
         });
-
-        tabWishlist.addEventListener('click', function() {
-            tabWishlist.classList.add('active');
-            tabProducts.classList.remove('active');
-            activeTab = 'wishlist';
-            loadProducts(activeCategory, searchInput.value);
+        
+        renderProducts(filtered);
+      }, 800);
+    }
+    
+    function renderProducts(productsList) {
+      const productsFeed = document.getElementById('productsFeed');
+      productsFeed.innerHTML = '';
+      
+      if (productsList.length === 0) {
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+      }
+      
+      document.getElementById('emptyState').style.display = 'none';
+      
+      productsList.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.innerHTML = `
+          <div class="product-brand">FOLLEN & SHAID</div>
+          <img src="${product.images[0]}" class="product-image" alt="${product.title}">
+          <div class="product-content">
+            <h3 class="product-title">${product.title}</h3>
+            <div class="product-price">${product.price.toLocaleString()} ₽</div>
+            <div class="product-rating">
+              ★ ${product.rating} (${product.reviews})
+            </div>
+          </div>
+        `;
+        productCard.addEventListener('click', () => {
+          openProductPage(product);
         });
+        productsFeed.appendChild(productCard);
+      });
     }
-
-    // ===== СОРТИРОВКА =====
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            loadProducts(activeCategory, searchInput.value);
-        });
-    }
-
-    // ===== ФУНКЦИЯ ЗАГРУЗКИ ТОВАРОВ =====
-    function loadProducts(category = activeCategory, searchQuery = '') {
-        console.log('📦 Загрузка товаров:', category, searchQuery);
-        
-        if (!productsFeed || !emptyState) return;
-        
-        createSkeletons();
-        
-        // Имитация загрузки
-        setTimeout(function() {
-            let filtered = products.filter(function(product) {
-                // Проверка категории
-                const matchesCategory = category === 'all' || product.category === category;
-                
-                // Проверка поискового запроса
-                if (searchQuery.trim() === '') return matchesCategory;
-                
-                const query = searchQuery.toLowerCase().trim();
-                const searchText = [
-                    product.title.toLowerCase(),
-                    product.description.toLowerCase(),
-                    ...(product.keywords || [])
-                ].join(' ');
-                
-                return matchesCategory && searchText.includes(query);
-            });
-
-            // Фильтрация избранного если активна вкладка wishlist
-            if (activeTab === 'wishlist') {
-                filtered = filtered.filter(product => favorites.includes(product.id));
-            }
-
-            // Сортировка
-            const sortValue = sortSelect ? sortSelect.value : 'none';
-            switch(sortValue) {
-                case 'priceAsc':
-                    filtered.sort((a, b) => a.price - b.price);
-                    break;
-                case 'priceDesc':
-                    filtered.sort((a, b) => b.price - a.price);
-                    break;
-                case 'ratingDesc':
-                    filtered.sort((a, b) => b.rating - a.rating);
-                    break;
-            }
-
-            renderCards(filtered);
-        }, 500);
-    }
-
-    // ===== ФУНКЦИЯ ОТРИСОВКИ КАРТОЧЕК =====
-    function renderCards(productsList) {
-        if (!productsFeed || !emptyState) return;
-        
-        productsFeed.innerHTML = '';
-        
-        if (productsList.length === 0) {
-            emptyState.style.display = 'block';
-            productsFeed.style.display = 'none';
-            return;
-        }
-        
-        emptyState.style.display = 'none';
-        productsFeed.style.display = 'grid';
-        
-        productsList.forEach(function(product) {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `
-                <div class="product-brand">FOLLEN & SHAID</div>
-                <img src="${product.images[0]}" class="product-image" alt="${product.title}">
-                <div class="product-content">
-                    <h3 class="product-title">${product.title}</h3>
-                    <div class="product-price">${product.price.toLocaleString()} ₽</div>
-                    <div class="product-rating">
-                        ★ ${product.rating} (${product.reviews})
-                    </div>
-                </div>
-            `;
-            
-            card.addEventListener('click', function() {
-                openProductPage(product);
-            });
-            
-            productsFeed.appendChild(card);
-        });
-    }
-
+    
     // ===== ФУНКЦИИ ДЛЯ СТРАНИЦЫ ТОВАРА =====
     function openProductPage(product) {
-        const productPage = document.getElementById('productPage');
-        const carouselInner = document.getElementById('carouselInner');
-        const carouselIndicators = document.getElementById('carouselIndicators');
+      const productPage = document.getElementById('productPage');
+      const carouselInner = document.getElementById('carouselInner');
+      const carouselIndicators = document.getElementById('carouselIndicators');
+      
+      if (!productPage || !carouselInner) return;
+      
+      // Заполняем галерею
+      carouselInner.innerHTML = '';
+      carouselIndicators.innerHTML = '';
+      
+      product.images.forEach((image, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        slide.innerHTML = `<img src="${image}" alt="${product.title}">`;
+        carouselInner.appendChild(slide);
         
-        if (!productPage || !carouselInner) return;
-        
-        // Заполняем галерею
-        carouselInner.innerHTML = '';
-        carouselIndicators.innerHTML = '';
-        
-        product.images.forEach((image, index) => {
-            const slide = document.createElement('div');
-            slide.className = 'carousel-slide';
-            slide.innerHTML = `<img src="${image}" alt="${product.title}">`;
-            carouselInner.appendChild(slide);
-            
-            const indicator = document.createElement('div');
-            indicator.className = 'carousel-indicator';
-            if (index === 0) indicator.classList.add('active');
-            carouselIndicators.appendChild(indicator);
-        });
-        
-        // Заполняем информацию
-        document.getElementById('productPageTitle').textContent = product.title;
-        document.getElementById('productPagePrice').textContent = `${product.price.toLocaleString()} ₽`;
-        document.getElementById('productPageDescription').textContent = product.description;
-        
-        // Рейтинг
-        const ratingStars = document.getElementById('productRatingStars');
-        const ratingCount = document.getElementById('productRatingCount');
-        if (ratingStars) ratingStars.innerHTML = '★'.repeat(Math.round(product.rating));
-        if (ratingCount) ratingCount.textContent = `${product.reviews} отзывов`;
-        
-        // Показываем страницу
-        productPage.classList.add('active');
+        const indicator = document.createElement('div');
+        indicator.className = 'carousel-indicator';
+        if (index === 0) indicator.classList.add('active');
+        carouselIndicators.appendChild(indicator);
+      });
+      
+      // Заполняем информацию
+      document.getElementById('productPageTitle').textContent = product.title;
+      document.getElementById('productPagePrice').textContent = `${product.price.toLocaleString()} ₽`;
+      document.getElementById('productPageDescription').textContent = product.description;
+      
+      // Рейтинг
+      const ratingStars = document.getElementById('productRatingStars');
+      const ratingCount = document.getElementById('productRatingCount');
+      if (ratingStars) ratingStars.innerHTML = '★'.repeat(Math.round(product.rating));
+      if (ratingCount) ratingCount.textContent = `${product.reviews} отзывов`;
+      
+      // Показываем страницу
+      productPage.classList.add('active');
     }
-
-    // ===== ГЛОБАЛЬНЫЕ ФУНКЦИИ =====
-    window.filterProducts = function(category) {
-        console.log('🎯 Фильтр по категории:', category);
-        activeCategory = category;
-        
-        const searchInput = document.getElementById('searchInputProducts');
-        loadProducts(category, searchInput ? searchInput.value : '');
-        
-        const categoriesToggle = document.getElementById('categoriesToggle');
-        const categoriesDropdown = document.getElementById('categoriesDropdown');
-        
-        if (categoriesToggle) categoriesToggle.classList.remove('active');
-        if (categoriesDropdown) categoriesDropdown.classList.remove('active');
-    };
-
+    
     window.closeProductPage = function() {
-        const productPage = document.getElementById('productPage');
-        if (productPage) {
-            productPage.classList.remove('active');
-        }
+      const productPage = document.getElementById('productPage');
+      if (productPage) {
+        productPage.classList.remove('active');
+      }
     };
-
+    
     // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
     function createSkeletons(count = 6) {
-        const productsFeed = document.getElementById('productsFeed');
-        if (!productsFeed) return;
-        
-        productsFeed.innerHTML = '';
-        productsFeed.style.display = 'grid';
-        
-        for(let i = 0; i < count; i++) {
-            const sk = document.createElement('div');
-            sk.className = 'skeleton-card';
-            sk.innerHTML = `
-                <div class="sk-image"></div>
-                <div class="sk-content">
-                    <div class="sk-line" style="width:80%"></div>
-                    <div class="sk-line" style="width:60%"></div>
-                    <div class="sk-line" style="width:40%"></div>
-                </div>
-            `;
-            productsFeed.appendChild(sk);
-        }
+      const productsFeed = document.getElementById('productsFeed');
+      if (!productsFeed) return;
+      
+      productsFeed.innerHTML = '';
+      productsFeed.style.display = 'grid';
+      
+      for(let i = 0; i < count; i++) {
+        const sk = document.createElement('div');
+        sk.className = 'skeleton-card';
+        sk.innerHTML = `
+          <div class="sk-image"></div>
+          <div class="sk-content">
+            <div class="sk-line" style="width:80%"></div>
+            <div class="sk-line" style="width:60%"></div>
+            <div class="sk-line" style="width:40%"></div>
+          </div>
+        `;
+        productsFeed.appendChild(sk);
+      }
     }
-
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction() {
-            const context = this;
-            const args = arguments;
-            const later = function() {
-                clearTimeout(timeout);
-                func.apply(context, args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    // ===== ЗАГРУЗКА ТОВАРОВ ПРИ ИНИЦИАЛИЗАЦИИ =====
-    loadProducts();
-}
-
-// ===== ФУНКЦИИ ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ =====
-function showProductsPage() {
-    document.getElementById('main-page').style.display = 'none';
-    document.getElementById('products-page').style.display = 'block';
-    currentPage = 'products-page';
     
-    if (!productsPageInitialized) {
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction() {
+        const context = this;
+        const args = arguments;
+        const later = function() {
+          clearTimeout(timeout);
+          func.apply(context, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+    
+    // ===== ФУНКЦИИ ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ =====
+    function showProductsPage() {
+      document.getElementById('main-page').style.display = 'none';
+      document.getElementById('products-page').style.display = 'block';
+      currentPage = 'products-page';
+      
+      if (!productsPageInitialized) {
         initProductsPage();
-    } else {
-        // Перезагружаем товары если страница уже инициализирована
+      } else {
         const searchInput = document.getElementById('searchInputProducts');
-        const loadProducts = window.loadProducts || function() {};
-        loadProducts(activeCategory, searchInput ? searchInput.value : '');
+        loadProductsData(activeCategory, searchInput ? searchInput.value : '');
+      }
     }
-}
-
-function hideProductsPage() {
-    document.getElementById('products-page').style.display = 'none';
-    document.getElementById('main-page').style.display = 'block';
-    currentPage = 'main-page';
-}
-
-// ===== ОБРАБОТЧИКИ СВАЙПОВ ДЛЯ ВОЗВРАТА НА ГЛАВНУЮ =====
-document.addEventListener('touchstart', function(e) {
-    if (currentPage === 'products-page') {
-        // Сохраняем начальную позицию касания только если мы в самом верху страницы
+    
+    function hideProductsPage() {
+      document.getElementById('products-page').style.display = 'none';
+      document.getElementById('main-page').style.display = 'block';
+      currentPage = 'main-page';
+    }
+    
+    // ===== ОБРАБОТЧИКИ СВАЙПОВ ДЛЯ ВОЗВРАТА НА ГЛАВНУЮ =====
+    document.addEventListener('touchstart', function(e) {
+      if (currentPage === 'products-page') {
         if (window.scrollY <= 10) {
-            touchStartY = e.touches[0].clientY;
+          touchStartY = e.touches[0].clientY;
         }
-    } else if (currentPage === 'main-page' && window.scrollY <= 0) {
+      } else if (currentPage === 'main-page' && window.scrollY <= 0) {
         touchStartY = e.touches[0].clientY;
-    }
-});
-
-document.addEventListener('touchmove', function(e) {
-    if (currentPage === 'products-page' && touchStartY && window.scrollY <= 10) {
+      }
+    });
+    
+    document.addEventListener('touchmove', function(e) {
+      if (currentPage === 'products-page' && touchStartY && window.scrollY <= 10) {
         const currentY = e.touches[0].clientY;
         const diffY = currentY - touchStartY;
         
-        // Если свайп вниз и мы в самом верху страницы
         if (diffY > 0) {
-            // Показываем индикатор возврата - двигаем всю страницу вниз
-            document.getElementById('products-page').style.transform = `translateY(${diffY}px)`;
-            e.preventDefault();
+          document.getElementById('products-page').style.transform = `translateY(${diffY}px)`;
+          e.preventDefault();
         }
-    }
-});
-
-document.addEventListener('touchend', function(e) {
-    if (currentPage === 'products-page' && touchStartY && window.scrollY <= 10) {
+      }
+    });
+    
+    document.addEventListener('touchend', function(e) {
+      if (currentPage === 'products-page' && touchStartY && window.scrollY <= 10) {
         const touchEndY = e.changedTouches[0].clientY;
         const diffY = touchEndY - touchStartY;
         
-        // Возвращаем страницу на место с анимацией
         const productsPage = document.getElementById('products-page');
         productsPage.style.transition = 'transform 0.3s ease';
         productsPage.style.transform = 'translateY(0)';
         
-        // Если свайп вниз достаточно сильный, возвращаемся на главную
         if (diffY > 100) {
-            setTimeout(() => {
-                hideProductsPage();
-                // Сбрасываем трансформацию после перехода
-                productsPage.style.transition = '';
-                productsPage.style.transform = '';
-            }, 300);
+          setTimeout(() => {
+            hideProductsPage();
+            productsPage.style.transition = '';
+            productsPage.style.transform = '';
+          }, 300);
         } else {
-            // Сбрасываем трансформацию если свайп был слабым
-            setTimeout(() => {
-                productsPage.style.transition = '';
-                productsPage.style.transform = '';
-            }, 300);
+          setTimeout(() => {
+            productsPage.style.transition = '';
+            productsPage.style.transform = '';
+          }, 300);
         }
         
         touchStartY = 0;
-    } else if (currentPage === 'main-page' && touchStartY && window.scrollY <= 0) {
+      } else if (currentPage === 'main-page' && touchStartY && window.scrollY <= 0) {
         const touchEndY = e.changedTouches[0].clientY;
         const diffY = touchEndY - touchStartY;
         
-        if (diffY < -50) { // Свайп вверх
-            showProductsPage();
+        if (diffY < -50) {
+          showProductsPage();
         }
         
         touchStartY = 0;
-    }
-});
-
-// ===== ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ =====
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📱 Страница загружена');
+      }
+    });
     
-    // Инициализируем глобальные переменные если их нет
-    if (typeof currentPage === 'undefined') currentPage = 'main-page';
-    if (typeof activeCategory === 'undefined') activeCategory = 'all';
-    if (typeof activeTab === 'undefined') activeTab = 'products';
-    if (typeof favorites === 'undefined') favorites = [];
-    if (typeof cartItems === 'undefined') cartItems = [];
-    if (typeof productsPageInitialized === 'undefined') productsPageInitialized = false;
-    if (typeof touchStartY === 'undefined') touchStartY = 0;
-    
-    // Добавляем обработчик для кнопки корзины
-    const cartButton = document.getElementById('bottomCartButton');
-    if (cartButton) {
+    // ===== ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ =====
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📱 Страница загружена');
+      
+      // Добавляем обработчик для кнопки корзины
+      const cartButton = document.getElementById('bottomCartButton');
+      if (cartButton) {
         cartButton.addEventListener('click', function() {
-            console.log('🛒 Открытие корзины');
-            // Здесь будет логика открытия корзины
+          console.log('🛒 Открытие корзины');
         });
-    }
-    
-    // Добавляем обработчик для кнопки "Добавить в корзину"
-    const addToCartBtn = document.getElementById('addToCartBtn');
-    if (addToCartBtn) {
+      }
+      
+      // Добавляем обработчик для кнопки "Добавить в корзину"
+      const addToCartBtn = document.getElementById('addToCartBtn');
+      if (addToCartBtn) {
         addToCartBtn.addEventListener('click', function() {
-            console.log('➕ Добавление в корзину');
-            // Здесь будет логика добавления в корзину
+          console.log('➕ Добавление в корзину');
         });
-    }
-});
-
-// ===== ДОБАВЛЯЕМ СТИЛИ ДЛЯ СКЕЛЕТОНОВ И СЕТКИ =====
-// Проверяем, не добавлены ли стили уже
-if (!document.getElementById('skeleton-styles')) {
-    const style = document.createElement('style');
-    style.id = 'skeleton-styles';
-    style.textContent = `
+      }
+    });
+    
+    // ===== ДОБАВЛЯЕМ СТИЛИ ДЛЯ СКЕЛЕТОНОВ И СЕТКИ =====
+    if (!document.getElementById('skeleton-styles')) {
+      const style = document.createElement('style');
+      style.id = 'skeleton-styles';
+      style.textContent = `
         .skeleton-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .sk-image {
-            width: 100%;
-            height: 180px;
-            background: #e9ecef;
+          width: 100%;
+          height: 180px;
+          background: #e9ecef;
         }
         
         .sk-content {
-            padding: 12px;
+          padding: 12px;
         }
         
         .sk-line {
-            height: 12px;
-            background: #e9ecef;
-            margin-bottom: 8px;
-            border-radius: 4px;
+          height: 12px;
+          background: #e9ecef;
+          margin-bottom: 8px;
+          border-radius: 4px;
         }
         
         .product-rating {
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
+          font-size: 12px;
+          color: #666;
+          margin-top: 4px;
         }
         
-        /* Стили для сетки 2 колонки */
         #productsFeed {
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 12px;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          padding: 12px;
         }
         
         .product-card {
-            width: 100%;
-            margin-bottom: 0;
+          width: 100%;
+          margin-bottom: 0;
         }
         
         .product-image {
-            height: 150px;
-            object-fit: cover;
+          height: 150px;
+          object-fit: cover;
         }
         
         .product-title {
-            font-size: 14px;
-            line-height: 1.2;
-            height: 2.4em;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+          font-size: 14px;
+          line-height: 1.2;
+          height: 2.4em;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
         
-        /* Анимация для свайпа вниз */
         #products-page {
-            transition: transform 0.3s ease;
+          transition: transform 0.3s ease;
         }
-    `;
-    document.head.appendChild(style);
-}
-
-// Блокировка масштабирования только при мультитаче
-let isScrolling = false;
-
-document.addEventListener('touchstart', function(e) {
-  if (e.touches.length > 1) {
-    e.preventDefault();
-  }
-}, { passive: false });
-
+      `;
+      document.head.appendChild(style);
+    }
+    
+    // Инициализация страницы товаров
+    document.getElementById('searchInputProducts').addEventListener('input', (e) => {
+      loadProductsData(activeCategory, e.target.value);
+    });
+    
+    document.getElementById('categoriesToggle').addEventListener('click', () => {
+      document.getElementById('categoriesDropdown').classList.toggle('active');
+    });
+    
+    document.getElementById('sortSelect').addEventListener('change', () => {
+      loadProductsData(activeCategory, document.getElementById('searchInputProducts').value);
+    });
+    
+    window.filterProducts = function(category) {
+      activeCategory = category;
+      loadProductsData(category, document.getElementById('searchInputProducts').value);
+      document.getElementById('categoriesDropdown').classList.remove('active');
+    };
+    
+    window.hideProductsPage = hideProductsPage;
 // Разрешаем скролл внутри элементов
 document.addEventListener('touchmove', function(e) {
   const target = e.target;
@@ -6258,199 +5846,6 @@ document.addEventListener('touchend', function(event) {
   }
   lastTouchEnd = now;
 }, false);
-
-// ===== ОБЪЕДИНЕННАЯ СИСТЕМА СВАЙПОВ С ПРОСТЫМИ АНИМАЦИЯМИ =====
-0;
-let isHorizontalSwipe = false;
-let isVerticalSwipe = false;
-let productsPageVisible = false;
-const SWIPE_THRESHOLD = 50;
-const productsPage = document.getElementById('products-page');
-const bottomNav = document.querySelector('.bottom-nav');
-
-// Функция для определения направления свайпа
-function handleSwipeGesture(currentPage, touchEndX, touchEndY) {
-  const diffX = touchEndX - touchStartX;
-  const diffY = touchEndY - touchStartY;
-  
-  if (isHorizontalSwipe && Math.abs(diffX) > SWIPE_THRESHOLD) {
-    // Горизонтальные свайпы для навигации
-    if (diffX > 0) {
-      // Свайп вправо - каюта появляется
-      if (currentPage === 'main-page') {
-        showPage(cabinetPage);
-        updateActiveNav(document.getElementById('cabinet-nav-item'));
-      } else if (currentPage === 'storage-page') {
-        showPage(mainPage);
-        updateActiveNav(null);
-      }
-    } else {
-      // Свайп влево - склад появляется
-      if (currentPage === 'main-page') {
-        showPage(storagePage);
-        updateActiveNav(document.getElementById('storage-nav-item'));
-      } else if (currentPage === 'cabinet-page') {
-        showPage(mainPage);
-        updateActiveNav(null);
-      }
-    }
-  } 
-  else if (isVerticalSwipe && Math.abs(diffY) > SWIPE_THRESHOLD) {
-    // Вертикальные свайпы для товаров
-    if (diffY < 0 && currentPage === 'main-page' && window.scrollY <= 0 && !productsPageVisible) {
-      // Свайп вверх на главной → открыть товары
-      showProductsPage();
-    }
-  }
-}
-// Простая функция показа страницы с fade-эффектом
-function showPage(pageToShow) {
-  // Сначала скрываем все страницы
-  const pages = [mainPage, cabinetPage, storagePage, treasurePage];
-  pages.forEach(page => {
-    if (page && page !== pageToShow) {
-      page.style.display = 'none';
-    }
-  });
-  
-  // Показываем нужную страницу с анимацией
-  if (pageToShow) {
-    pageToShow.style.display = 'block';
-    pageToShow.style.opacity = '0';
-    pageToShow.style.transition = 'opacity 0.3s ease';
-    
-    // Запускаем fade-in анимацию
-    setTimeout(() => {
-      pageToShow.style.opacity = '1';
-    }, 10);
-    
-    // Убираем transition после анимации
-    setTimeout(() => {
-      pageToShow.style.transition = '';
-      pageToShow.style.opacity = '';
-    }, 300);
-  }
-}
-
-// Добавь вызов в обработчик свайпов
-function handleTouchEnd(e) {
-  productsPageVisible = true;
-  bottomNav.style.transition = 'transform 0.3s ease';
-  bottomNav.style.transform = 'translateY(100%)';
-  productsPage.style.display = 'block';
-  productsPage.style.opacity = '0';
-  productsPage.style.transform = 'translateY(20px)';
-  productsPage.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-  
-  setTimeout(() => {
-    productsPage.style.opacity = '1';
-    productsPage.style.transform = 'translateY(0)';
-  }, 10);
-  
-  if (document.getElementById('productsFeed').children.length === 0) {
-    loadProductsData();
-  }
-}
-
-// Функция для скрытия страницы товаров
-function hideProductsPage() {
-  productsPageVisible = false;
-  productsPage.style.transform = 'translateY(100%)';
-  productsPage.style.opacity = '0';
-  
-  setTimeout(() => {
-    productsPage.style.display = 'none';
-    bottomNav.style.transform = 'translateY(0)';
-  }, 300);
-}
-
-// Обработчик начала касания
-function handleTouchStart(e) {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-  isHorizontalSwipe = false;
-  isVerticalSwipe = false;
-}
-
-// Обработчик движения касания
-function handleTouchMove(e) {
-  if (!touchStartX) return;
-  
-  const currentX = e.touches[0].clientX;
-  const currentY = e.touches[0].clientY;
-  const diffX = currentX - touchStartX;
-  const diffY = currentY - touchStartY;
-  
-  // Определяем тип свайпа
-  if (Math.abs(diffX) > Math.abs(diffY)) {
-    isHorizontalSwipe = true;
-    isVerticalSwipe = false;
-  } else {
-    isHorizontalSwipe = false;
-    isVerticalSwipe = true;
-  }
-  
-  // Если это горизонтальный свайп, предотвращаем вертикальную прокрутку
-  if (Math.abs(diffX) > 10 && isHorizontalSwipe) {
-    e.preventDefault();
-  }
-  
-  // Обработка свайпа вниз для закрытия товаров
-  if (productsPageVisible && isVerticalSwipe && diffY > 0 && window.scrollY <= 0) {
-    e.preventDefault();
-    productsPage.style.opacity = 1 - diffY / 300;
-  }
-}
-
-// Обработчик окончания касания
-function handleTouchEnd(e) {
-  if (!touchStartX) return;
-  
-  const touchEndX = e.changedTouches[0].clientX;
-  const touchEndY = e.changedTouches[0].clientY;
-  const diffY = touchEndY - touchStartY;
-
-  // Определяем текущую страницу
-  let currentPage = '';
-  if (mainPage.style.display !== 'none') currentPage = 'main-page';
-  else if (cabinetPage.style.display !== 'none') currentPage = 'cabinet-page';
-  else if (storagePage.style.display !== 'none') currentPage = 'storage-page';
-  else if (treasurePage.style.display !== 'none') currentPage = 'treasure-page';
-  
-  // Обрабатываем горизонтальные свайпы
-  if (currentPage && currentPage !== 'treasure-page') {
-    handleSwipeGesture(currentPage, touchEndX, touchEndY);
-  }
-  
-  // Обработка свайпа вниз для закрытия товаров
-  if (productsPageVisible && isVerticalSwipe && diffY > 100 && window.scrollY <= 0) {
-    hideProductsPage();
-  } else if (productsPageVisible && isVerticalSwipe) {
-    productsPage.style.opacity = '1';
-  }
-  
-  // Сбрасываем начальные координаты
-  touchStartX = 0;
-  touchStartY = 0;
-  isHorizontalSwipe = false;
-  isVerticalSwipe = false;
-}
-
-// Добавляем обработчики свайпов ко всем страницам
-function initSwipeNavigation() {
-  const pages = [mainPage, cabinetPage, storagePage, treasurePage, productsPage];
-  
-  pages.forEach(page => {
-    if (page) {
-      page.addEventListener('touchstart', handleTouchStart, { passive: true });
-      page.addEventListener('touchmove', handleTouchMove, { passive: false });
-      page.addEventListener('touchend', handleTouchEnd, { passive: true });
-    }
-  });
-}
-
-// Инициализация свайп-навигации после загрузки DOM
-initSwipeNavigation();
   
  // Переменные для страницы отзывов
 let reviewsPageInitialized = false;
