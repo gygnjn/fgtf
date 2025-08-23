@@ -3288,7 +3288,7 @@
   height: 60px;
   background-color: #000;
   border-radius: 50%;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -3322,6 +3322,54 @@
   font-weight: bold;
 }
 
+/* Стили для сетки товаров */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 20px;
+}
+
+.product-card {
+  background: #2c2c2e;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.product-card:active {
+  transform: scale(0.98);
+}
+
+.product-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.product-content {
+  padding: 12px;
+}
+
+.product-title {
+  font-size: 14px;
+  margin: 0 0 8px 0;
+  color: #fff;
+  height: 40px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
 /* Стили для кнопки добавления в корзину */
 .add-to-cart-btn {
   background-color: #007aff;
@@ -3333,6 +3381,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   margin-top: 8px;
+  width: 100%;
 }
 
 .add-to-cart-btn:hover {
@@ -3344,7 +3393,6 @@
 }
 
 .add-to-cart-btn.large {
-  width: 100%;
   padding: 15px;
   font-size: 16px;
   margin-top: 20px;
@@ -3363,6 +3411,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
+  display: none;
 }
 
 .modal-content {
@@ -3428,26 +3477,12 @@
   font-size: 16px;
 }
 
-.product-content {
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.product-title {
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: #fff;
-  flex: 1;
-}
-
-.product-price {
+/* Состояние пустого списка */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #888;
   font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 8px;
 }
   </style>
 </head>
@@ -4145,7 +4180,7 @@
 </div>
 
 <!-- Модальное окно товара -->
-<div class="product-modal" id="productModal" style="display: none;">
+<div class="product-modal" id="productModal">
   <div class="modal-content">
     <div class="modal-header">
       <button class="modal-close" id="modalClose">×</button>
@@ -4163,6 +4198,14 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Контейнер для товаров -->
+<div class="products-grid" id="productsFeed"></div>
+
+<!-- Состояние пустого списка -->
+<div class="empty-state" id="emptyState" style="display: none;">
+  <p>Товары не найдены</p>
 </div>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -5406,11 +5449,11 @@ function hidePaymentModal() {
       isSwipingUp = false;
     });
 
-    // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
-let globalCart = [];
-let currentProduct = null;
+    
+  
+  // Проверяем, есть ли элементы страницы товаров
 
-// Данные товаров
+// ===== ДАННЫЕ ТОВАРОВ =====
 const productsData = [
   {
     id: 1,
@@ -5450,47 +5493,12 @@ const productsData = [
     category: "jewelry",
     rating: 4.9,
     reviews: 32
-  },
-  {
-    id: 4,
-    title: "Умные часы Pro",
-    images: [
-      "https://images.unsplash.com/photo-1558379850-823f103f866a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-    ],
-    description: "Умные часы с функцией мониторинга здоровья.",
-    price: 32990,
-    category: "watches",
-    rating: 4.7,
-    reviews: 15
-  },
-  {
-    id: 5,
-    title: "Беспроводные наушники Air",
-    images: [
-      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1578319439584-104c94d37305?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-    ],
-    description: "Компактные беспроводные наушники.",
-    price: 15990,
-    category: "headphones",
-    rating: 4.3,
-    reviews: 22
-  },
-  {
-    id: 6,
-    title: "Футболка Classic Black",
-    images: [
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1527719327859-c6ce80353573?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-    ],
-    description: "Классическая черная футболка из 100% хлопка.",
-    price: 2990,
-    category: "tshirts",
-    rating: 4.2,
-    reviews: 45
   }
 ];
+
+// ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+let globalCart = [];
+let currentProduct = null;
 
 // ===== ФУНКЦИИ ДЛЯ КОРЗИНЫ =====
 function addToCart(productId) {
@@ -5507,10 +5515,8 @@ function addToCart(productId) {
       id: product.id,
       name: product.title,
       price: product.price,
-      image: getProductIcon(product.category),
-      quantity: 1,
-      category: getCategoryName(product.category),
-      inStock: Math.floor(Math.random() * 10) + 1
+      image: product.images[0],
+      quantity: 1
     };
     
     globalCart.push(cartProduct);
@@ -5518,7 +5524,6 @@ function addToCart(productId) {
   }
   
   updateCartCount();
-  triggerVibration();
   saveCartToStorage();
 }
 
@@ -5560,49 +5565,6 @@ function loadCartFromStorage() {
   }
 }
 
-// ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
-function getProductIcon(category) {
-  const icons = {
-    'watches': 'clock',
-    'headphones': 'headphones',
-    'jewelry': 'gem',
-    'tshirts': 'tshirt',
-    'hoodies': 'hoodie',
-    'hats': 'hat-cowboy',
-    'shoes': 'shoe-prints',
-    'pants': 'jeans'
-  };
-  return icons[category] || 'box';
-}
-
-function getCategoryName(category) {
-  const categories = {
-    'watches': 'Часы',
-    'headphones': 'Наушники',
-    'jewelry': 'Украшения',
-    'tshirts': 'Футболки',
-    'hoodies': 'Толстовки',
-    'hats': 'Головные уборы',
-    'shoes': 'Обувь',
-    'pants': 'Брюки'
-  };
-  return categories[category] || 'Другое';
-}
-
-function showToast(message) {
-  console.log('Toast:', message);
-  // Простая замена toast для демонстрации
-  if (typeof alert !== 'undefined') {
-    alert(message);
-  }
-}
-
-function triggerVibration() {
-  if (navigator.vibrate) {
-    navigator.vibrate(50);
-  }
-}
-
 // ===== ФУНКЦИИ ДЛЯ МОДАЛЬНОГО ОКНА =====
 function showProductDetails(product) {
   currentProduct = product;
@@ -5618,8 +5580,8 @@ function showProductDetails(product) {
     modalPrice.textContent = product.price.toLocaleString() + ' ₽';
     modalDescription.textContent = product.description;
     modalRating.textContent = 'Рейтинг: ' + product.rating + ' ★ (' + product.reviews + ' отзывов)';
-    
-    // Очищаем и добавляем изображения
+
+// Очищаем и добавляем изображения
     modalImages.innerHTML = '';
     product.images.forEach(function(image) {
       const img = document.createElement('img');
@@ -5642,14 +5604,14 @@ function closeProductModal() {
   }
 }
 
-// ===== ОБНОВЛЕННАЯ ФУНКЦИЯ RENDERPRODUCTS =====
-function renderProducts(productsList) {
+// ===== ФУНКЦИЯ ОТОБРАЖЕНИЯ ТОВАРОВ =====
+function renderProducts() {
   const productsFeed = document.getElementById('productsFeed');
   if (!productsFeed) return;
   
   productsFeed.innerHTML = '';
   
-  if (productsList.length === 0) {
+  if (productsData.length === 0) {
     const emptyState = document.getElementById('emptyState');
     if (emptyState) emptyState.style.display = 'block';
     return;
@@ -5658,7 +5620,7 @@ function renderProducts(productsList) {
   const emptyState = document.getElementById('emptyState');
   if (emptyState) emptyState.style.display = 'none';
   
-  productsList.forEach(function(product) {
+  productsData.forEach(function(product) {
     const productCard = document.createElement('div');
     productCard.className = 'product-card';
     productCard.innerHTML = '<img src="' + product.images[0] + '" class="product-image" alt="' + product.title + '" onerror="this.src=\'https://via.placeholder.com/200x200/333/fff?text=No+Image\'">' +
@@ -5686,12 +5648,21 @@ function renderProducts(productsList) {
   });
 }
 
+// ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
+function showToast(message) {
+  // Простая реализация уведомления
+  alert(message);
+}
+
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM загружен');
   
   // Загружаем корзину из хранилища
   loadCartFromStorage();
+  
+  // Отображаем товары
+  renderProducts();
   
   // Инициализируем обработчики для модального окна
   const modal = document.getElementById('productModal');
@@ -5718,14 +5689,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const cartIcon = document.getElementById('cartIcon');
   if (cartIcon) {
     cartIcon.addEventListener('click', function() {
-      alert('Открытие корзины');
+      alert('В корзине: ' + globalCart.length + ' товаров');
     });
-  }
-  
-  // Проверяем, есть ли элементы страницы товаров
-  const productsPage = document.getElementById('products-page');
-  if (productsPage) {
-    console.log('Страница товаров обнаружена');
   }
 });
 
